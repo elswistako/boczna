@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasza Galeria</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Indie+Flower&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0; padding: 0;
+            background-color: #0d0d0d; color: #ffffff;
+            font-family: 'Indie Flower', cursive;
+        }
+
+        .container {
+            max-width: 95%; margin: 0 auto; padding: 20px 10px; text-align: center;
+        } 
+
+        h1 { font-family: 'Caveat', cursive; color: #8b0000; font-size: 3em; margin-bottom: 5px; }
+        
+        .description { color: #888; margin-bottom: 30px; font-size: 1.1em; }
+
+        /* SIATKA */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .gallery-item {
+            background: #161616;
+            border: 2px solid #8b0000;
+            padding: 5px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item img {
+            width: 100%; height: 160px;
+            object-fit: cover; border-radius: 8px;
+            display: block;
+        }
+
+        .gallery-item:nth-child(odd) { transform: rotate(-1.5deg); }
+        .gallery-item:nth-child(even) { transform: rotate(1.5deg); }
+        .gallery-item:hover { transform: scale(1.03) rotate(0deg); border-color: #ff4d4d; }
+
+        /* LIGHTBOX (Powiększenie zdjęcia) */
+        #lightbox {
+            display: none; position: fixed; z-index: 999;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); align-items: center; justify-content: center;
+        }
+
+        #lightbox img {
+            max-width: 90%; max-height: 80%;
+            border: 3px solid #8b0000; border-radius: 10px;
+        }
+
+        .close-btn {
+            position: absolute; top: 20px; right: 30px;
+            color: white; font-size: 40px; cursor: pointer;
+        }
+
+        .back-btn {
+            display: inline-block; margin: 40px 0;
+            padding: 10px 25px; color: #8b0000;
+            text-decoration: none; border: 2px solid #8b0000;
+            border-radius: 25px; font-family: 'Caveat', cursive; font-size: 1.3em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Nasze zdjencia</h1>
+        <p class="description">Kliknij zdjęcie, żeby je powiększyć ✨</p>
+
+        <div class="gallery-grid" id="main-gallery">
+            </div>
+
+        <a href="https://perswistak.github.io/dominiga/" class="back-btn">← Wróć na główna</a>
+    </div>
+
+    <div id="lightbox" onclick="this.style.display='none'">
+        <span class="close-btn">&times;</span>
+        <img id="lightbox-img" src="" alt="Powiększenie">
+    </div>
+
+    <script>
+        // --- KONFIGURACJA ---
+        const totalImages = 48; // <--- ZMIENIAJ TYLKO TĘ LICZBĘ po dodaniu nowych zdjęć!
+        const filePrefix = "photo"; // Zdjęcia muszą nazywać się: photo1.jpg, photo2.jpg itd.
+        const fileExtension = ".jpg"; 
+        // --------------------
+
+        const gallery = document.getElementById('main-gallery');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        for (let i = 1; i <= totalImages; i++) {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            
+            const img = document.createElement('img');
+            const fileName = `${filePrefix}${i}${fileExtension}`;
+            img.src = fileName;
+            
+            item.onclick = () => {
+                lightboxImg.src = fileName;
+                lightbox.style.display = 'flex';
+            };
+
+            img.onerror = function() { this.parentElement.style.display = 'none'; };
+
+            item.appendChild(img);
+            gallery.appendChild(item);
+        }
+    </script>
+</body>
+</html>
